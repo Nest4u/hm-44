@@ -1,27 +1,35 @@
-import React, { useState } from "react";
-import { useTodoContext } from "../context/TodoContext";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store';
+import { addTodo } from '../redux/todosSlice';
 
 export const AddTodo: React.FC = () => {
-  const [text, setText] = useState("");
-  const { addTodo } = useTodoContext();
+  const [text, setText] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddTodo = () => {
     if (text.trim()) {
-      addTodo(text);
-      setText("");
+      dispatch(addTodo(text));
+      setText('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="flex gap-2 mb-4">
       <input
+        className="flex-1 p-2 border border-gray-300 rounded"
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Add a new task"
+        placeholder="What needs to be done?"
       />
-      <button type="submit">Add</button>
-    </form>
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={handleAddTodo}
+      >
+        Add
+      </button>
+    </div>
   );
 };
+
